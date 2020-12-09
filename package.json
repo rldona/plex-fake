@@ -25,7 +25,7 @@
     "xml2js": "^0.4.23"
   },
   "scripts": {
-    "start": "npm run build && node ./server/index.js",
+    "start": "npm run build && pm2 start ./server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
