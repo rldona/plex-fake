@@ -1,0 +1,51 @@
+{
+  "name": "fake-plex-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "async": "^3.2.0",
+    "await-timeout": "^1.1.1",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.15",
+    "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.0",
+    "puppeteer": "^3.0.4",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23"
+  },
+  "scripts": {
+    "start": "npm run build && node ./server/index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "logs": "heroku logs --tail",
+    "start-client": "npm run build && node ./server/client.js",
+    "start-server": "node ./server/server.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

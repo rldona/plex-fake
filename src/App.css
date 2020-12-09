@@ -1,0 +1,218 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ######## */
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1em;
+  line-height: 1.5em;
+}
+
+#app {
+  font: 14px 'Roboto', Helvetica, Arial, sans-serif;
+  color: #4d4d4d;
+}
+
+a.active {
+  color: orange;
+}
+
+nav {
+  padding-top: 20px;
+}
+
+/* ######## */
+
+.movie-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.movie-list {
+  padding: 15px 0;
+}
+
+.movie-list ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+.item {
+  text-align: center;
+  width: 180px;
+  padding: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.item h2 {
+  color: #FFF;
+  font-size: 18px;
+  padding: 20px 0;
+}
+
+.item img {
+  width: 100%;
+  height: 200px;
+}
+
+.item ul {
+  background: #222;
+  padding: 15px 0;
+  color: #FFF;
+}
+
+.item ul li {
+  font-size: 20px;
+}
+
+.item.positiva {
+  background-color: #4CAF50;
+}
+
+.item.neutral {
+  background-color: #FF9800;
+}
+
+.item.negativa {
+  background-color: #f44336;
+}
+
+.item.viewed {
+  opacity: 0.3;
+}
+
+.movie-detail .thunbnail {
+  height: 300px;
+  background-size: cover;
+}
+
+.movie-detail > h2 {
+  font-size: 20px;
+  margin: 20px 0;
+  font-weight: 600;
+  padding: 0 20px;
+}
+
+.movie-detail h3 {
+  margin: 20px 0;
+  font-weight: 600;
+  padding: 0 20px;
+}
+
+.movie-detail > p {
+  font-size: 17px;
+  padding: 0 20px;
+  text-align: justify;
+}
+
+.movie-detail .rating {
+  display: flex;
+  justify-content: space-between;
+  background: #222;
+  padding: 10px;
+}
+
+.movie-detail .rating li {
+  background: #FFF;
+  padding: 15px;
+  font-size: 30px;
+}
+
+.movie-detail .rating li.positiva {
+  background-color: #4CAF50;
+}
+
+.movie-detail .rating li.neutral {
+  background-color: #FF9800;
+}
+
+.movie-detail .rating li.negativa {
+  background-color: #f44336;
+}
+
+.review-list p {
+  color: #FFF;
+}
+
+.review-list .body{
+  margin-bottom: 20px;
+}
+
+.review-list .review-item {
+  padding: 20px;
+  background-color: burlywood;
+}
+
+.review-list .review-item.positiva {
+  background-color: #4CAF50;
+}
+
+.review-list .review-item.neutral {
+  background-color: #FF9800;
+}
+
+.review-list .review-item.negativa {
+  background-color: #f44336;
+}
+
+.load-more {
+  padding: 20px 0;
+  width: 100%;
+  background-color: #E91E63;
+  color: #FFF;
+  font-size: 20px;
+  font-weight: 600;
+}
