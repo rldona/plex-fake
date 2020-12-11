@@ -29,7 +29,7 @@ class MovieList extends Component {
     const type = 'movies';
 
     // fetch(`https://plex-fake-server.herokuapp.com/movies?type=${type}&page=${page}&size=${size}`)
-    fetch(`http://3.248.248.180:3000/${type}`)
+    fetch(`http://54.78.71.156:3000/${type}`)
       .then(response => response.json())
       .then(movies => {
         this.setState(state => {

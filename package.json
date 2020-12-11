@@ -30,8 +30,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "logs": "heroku logs --tail",
-    "start-client": "npm run build && node ./server/client.js",
-    "start-server": "node ./server/server.js"
+    "start-client": "npm run build && pm2 start ./server/client.js",
+    "start-server": "pm2 start ./server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
