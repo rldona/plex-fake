@@ -54,9 +54,10 @@ table {
 }
 
 body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Roboto;
   font-size: 1em;
   line-height: 1.5em;
+  background-color: #f6f7f9;
 }
 
 #app {
@@ -92,46 +93,83 @@ nav {
 .item {
   text-align: center;
   width: 180px;
-  padding: 10px;
-  margin-bottom: 20px;
+  margin: 20px;
   cursor: pointer;
+  box-shadow: 0 3px 15px 0 rgba(58,59,69,.25);
+  border-radius: 10px 10px 0 0;
+  background-color: #FFF;
+  position: relative;
 }
 
-.item h2 {
+.item .info-extra {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0px 10px;
+}
+
+.item .info-extra p {
+  font-size: 14px;
+}
+
+.item .rating-average {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #FFF;
+  padding: 5px;
+  box-shadow: 0 3px 15px 0 rgba(58,59,69,.25);
+  border-radius: 5px;
   color: #FFF;
+  min-width: 64px;
   font-size: 18px;
-  padding: 20px 0;
+  font-weight: 600;
+}
+
+.item .rating-average i {
+  font-size: 16px;
+}
+
+.item .rating-count {
+  font-size: 16px;
+}
+
+
+.item h2 {
+  padding: 0px 15px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
 }
 
 .item img {
   width: 100%;
-  height: 200px;
+  height: 250px;
+  border-radius: 10px 10px 0 0;
 }
 
 .item ul {
-  background: #222;
-  padding: 15px 0;
-  color: #FFF;
+  padding: 10px 0;
 }
 
 .item ul li {
-  font-size: 20px;
+  font-size: 16px;
 }
 
-.item.positiva {
+.item.positiva .rating-average {
   background-color: #4CAF50;
 }
 
-.item.neutral {
+.item.neutral .rating-average {
   background-color: #FF9800;
 }
 
-.item.negativa {
+.item.negativa .rating-average {
   background-color: #f44336;
 }
 
 .item.viewed {
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .movie-detail .thunbnail {

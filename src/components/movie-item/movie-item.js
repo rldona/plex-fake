@@ -2,10 +2,22 @@ import React, { Component } from 'react';
 
 import { withRouter } from 'react-router-dom'
 
+import thumbnail from '../../img/godmothered-300496698-mmed.jpg';
+
 class MovieItem extends Component {
   navigateTo(id) {
     const { history, movie } = this.props;
     history.push({ pathname:`/movie-detail/${id}`, state: { movie: movie } });
+  }
+
+  convertMinutesToHours = (n) => {
+    const num = n / 60000;
+    const hours = (num / 60);
+    const rhours = Math.floor(hours);
+    const minutes = (hours - rhours) * 60;
+    const rminutes = Math.round(minutes);
+
+    return `${rhours}h ${rminutes}m`;
   }
 
   render() {
@@ -16,11 +28,12 @@ class MovieItem extends Component {
     return (
       <div className={`item ${parseInt(movie.ratingAvergae) >= 5 ? (parseInt(movie.ratingAvergae) >= 6 ? 'positiva' : 'neutral') : 'negativa'} ${movie.viewCount ? 'viewed' : ''}`} onClick={() => this.navigateTo(movie._id)}>
         <img src={movie.thumbnail} alt={movie.title} />
-        <ul>
-          <li>{movie.ratingAvergae}</li>
-          <li>{movie.ratingCount}</li>
-        </ul>
+        <p class="rating-average"><i class="fas fa-heart"></i> {movie.ratingAvergae === '0' ? '-' : movie.ratingAvergae}</p>
         <h2>{movie.title}</h2>
+        <div class="info-extra">
+          <p><i class="fas fa-eye"></i> {movie.ratingCount  === '0' ? '-' : movie.ratingCount}</p>
+          <p><i class="fas fa-clock"></i> {this.convertMinutesToHours(movie.duration)}</p>
+        </div>
       </div>
     );
   }

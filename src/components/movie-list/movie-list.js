@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Box, Tab, Tabs } from 'grommet';
 
 import MovieItem from '../movie-item/movie-item';
-
 class MovieList extends Component {
   constructor(props) {
     super(props);

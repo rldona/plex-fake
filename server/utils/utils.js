@@ -5,6 +5,24 @@ const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
+exports.convertMinutesToHours = (n) => {
+  const num = n;
+  const hours = (num / 60);
+  const rhours = Math.floor(hours);
+  const minutes = (hours - rhours) * 60;
+  const rminutes = Math.round(minutes);
+
+  return hours + ":" + rminutes;
+}
+
+exports.resetSearch = async (page, searchTerm) => {
+  await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2', timeout: 0 });
+  await page.waitFor('#top-search-input');
+  await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
+  await page.click('input[type="submit"]');
+  await page.waitForSelector('#main-content-table');
+}
+
 exports.writeXMLtoJSON = async (url, type) => {
   let dataAsJson = {};
 
@@ -30,7 +48,13 @@ exports.filterMediaPlexInfo = async (movie) => {
     summary: movie.attributes.summary || '',
     duration: movie.attributes.duration || 90,
     studio: movie.attributes.studio || '',
-    year: movie.attributes.year || 1990
+    year: movie.attributes.year || 1990,
+    originallyAvailableAt: movie.attributes.originallyAvailableAt || '',
+    addedAt: movie.attributes.addedAt || '',
+    updatedAt: movie.attributes.updatedAt || '',
+    theMovieDbRating: movie.attributes.rating || '',
+    theMovieDbUrl: movie.attributes.theMovieDbUrl || '',
+    infoExtra: movie.elements || ''
   }
 };
 
@@ -75,11 +99,13 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.type = media.type;
   mediaReview.duration = media.duration;
   mediaReview.studio = media.studio;
+  mediaReview.year = media.year;
+  mediaReview.originallyAvailableAt = media.originallyAvailableAt;
+  mediaReview.addedAt = media.addedAt;
+  mediaReview.updatedAt = media.updatedAt;
+  mediaReview.theMovieDbRating = media.theMovieDbRating;
+  mediaReview.theMovieDbUrl = media.theMovieDbUrl;
+  mediaReview.infoExtra = media.infoExtra;
 
   return mediaReview;
-}
-
-exports.convertReviewListToJOSON = async (list, type) => {
-  let jsonContent = JSON.stringify(list);
-  fs.writeFileSync(path.resolve(__dirname, '../db/', `${type}-db.json`), jsonContent);
 }

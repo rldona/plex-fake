@@ -1,18 +1,11 @@
-const mongoose = require('mongoose');
 const puppeteer = require('puppeteer');
-const mongodb = require('./utils/mongodb');
 const utils = require('./utils/utils');
+// const cron = require('node-cron');
+const admin = require("firebase-admin");
 
-var cron = require('node-cron');
+const db = admin.firestore();
 
-let media = {
-  'movie': {
-    'data': []
-  },
-  'show': {
-    'data': []
-  }
-};
+let order = 0;
 
 async function getReview (moviePlexInfo) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
@@ -29,14 +22,29 @@ async function getReview (moviePlexInfo) {
   await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
   await page.click('input[type="submit"]');
 
+  await page.waitForSelector('#main-content-table');
+
+  console.log(`-- ${page.url().search('search')} --`);
+
   if (page.url().search('search') === -1) {
     await getMovieReviewFromDetail(browser, page, moviePlexInfo);
-  } else if (page.url().search('advsearch') !== -1) {
-    await getMovieReviewFromAdvancedSearch(browser, page, moviePlexInfo);
-  } else {
+  }
+
+  if (page.url().search('search') === 32) {
     await getMovieReviewFromSearch(browser, page, moviePlexInfo);
   }
+
+  if (page.url().search('search') === 35) {
+    db.collection(`${moviePlexInfo.type}s`).doc(moviePlexInfo.title).set(moviePlexInfo);
+    order++;
+    await browser.close();
+  }
 }
+
+// async function getAllDocumentsColletion(collectionName) {
+//   const snapshot = await db.collection(collectionName).orderBy('order').get();
+//   return snapshot.docs.map(doc => doc.data());
+// }
 
 async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchPage) {
   if (typeof urlSearchPage !== 'undefined') {
@@ -46,13 +54,36 @@ async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchP
   await page.waitForSelector('#mt-content-cell');
 
   const review = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
+  // const reviews = await getAllDocumentsColletion(`${review.type}s`);
 
-  media[review.type].data.push(review);
+  // let newReview = db.collection(`${review.type}s`).doc(review.title);
 
-  console.log(`Movies: ${media['movie'].data.length}`);
-  console.log(`Series: ${media['show'].data.length}`);
+  // if (reviews.length === 0) {
+  //   review.order = 0;
+  // }
 
-  // mongodb.insert(review);
+  console.log(review.title);
+
+  review.order = order;
+
+  db.collection(`${review.type}s`).doc(review.title).set(review);
+
+  order++;
+
+  // newReview.get()
+  //   .then(doc => {
+  //     if (!doc.exists) {
+  //       console.log('Nueva película encontrada y añadida a la base de datos');
+  //       review.order = ++reviews[reviews.length - 1].order;
+  //       db.collection(`${review.type}s`).doc(review.title).set(review);
+  //     } else {
+  //       console.log('La película ya está en la base de datos');
+  //       process.exit();
+  //     }
+  //   })
+  //   .catch(err => {
+  //     console.log('Error getting document', err);
+  //   });
 
   await browser.close();
 }
@@ -65,10 +96,6 @@ async function getMovieReviewFromSearch(browser, page, moviePlexInfo) {
   });
 
   await getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchPage);
-}
-
-async function getMovieReviewFromAdvancedSearch(browser, page) {
-  await browser.close();
 }
 
 async function createReview(type) {
@@ -84,26 +111,22 @@ async function createReview(type) {
 async function initByType (url, type) {
   await utils.writeXMLtoJSON(url, type);
   await createReview(type);
-  await utils.convertReviewListToJOSON(media[type], type);
 }
 
 exports.init = async () => {
-  const sizeList = 100;
+  const movieStart = 569;
+  const movieEnd = 2500;
 
-  const moviesUrl = `https://195-154-178-71.06e267a88a7d4be5991af2a36c663e4b.plex.direct:32400/library/sections/9/all?type=1&sort=originallyAvailableAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=0&X-Plex-Container-Size=${sizeList}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=bub8wo7yvridyyyu9buwda45&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1685x1306%2C2560x1440&X-Plex-Token=H2oihB3g2ZUzUHXyXx-V&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
-  const seriesUrl = `https://195-154-185-117.1fa6c2d7e4d148db9e380a96583039ad.plex.direct:32400/library/sections/1/all?type=2&sort=originallyAvailableAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=0&X-Plex-Container-Size=${sizeList}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=bub8wo7yvridyyyu9buwda45&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1685x1306%2C2560x1440&X-Plex-Token=UdMoTNn42q9Uzxi-6EsR&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
+  const moviesUrl = `https://195-154-178-71.06e267a88a7d4be5991af2a36c663e4b.plex.direct:32400/library/sections/9/all?type=1&sort=addedAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=${movieStart}&X-Plex-Container-Size=${movieEnd}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=o6gz0i8lr4gpu8bz7e9gkajg&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1784x1306%2C2560x1440&X-Plex-Token=H2oihB3g2ZUzUHXyXx-V&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
+  // const seriesUrl = `https://195-154-185-117.1fa6c2d7e4d148db9e380a96583039ad.plex.direct:32400/library/sections/1/all?type=2&sort=originallyAvailableAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=0&X-Plex-Container-Size=${sizeList}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=bub8wo7yvridyyyu9buwda45&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1685x1306%2C2560x1440&X-Plex-Token=UdMoTNn42q9Uzxi-6EsR&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
 
-  // mongodb.resetCollection();
+  await initByType(moviesUrl, 'movie');
 
-  // await mongodb.connect(TYPE);
+  // cron.schedule('0 0 * * *', async () => {
+  //   console.log('Running this task every day at 00:00h');
+  //   await initByType(moviesUrl, 'movie');
+  //   await initByType(seriesUrl, 'show');
+  // });
 
-  cron.schedule('50 12 * * *', async () => {
-    console.log('Running this task every day at 00:00h');
-    media.movie.data = [];
-    media.show.data = [];
-    await initByType(moviesUrl, 'movie');
-    await initByType(seriesUrl, 'show');
-  });
-
-  // mongoose.connection.close();
+  process.exit();
 }

@@ -12,7 +12,7 @@ app.get('*', (req, res) => {
    res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4242;
 
 app.listen(port, () => {
    console.log(`Client is up a port ${port}!`);
