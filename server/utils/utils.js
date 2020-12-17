@@ -5,6 +5,11 @@ const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
+exports.getAllDocumentsColletion = async (db, collectionName) => {
+  const snapshot = await db.collection(collectionName).orderBy('order').get();
+  return snapshot.docs.map(doc => doc.data());
+}
+
 exports.convertMinutesToHours = (n) => {
   const num = n;
   const hours = (num / 60);
