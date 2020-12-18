@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const admin = require("firebase-admin");
-const serviceAccount = require("/Users/raul/plex-fake-firebase-adminsdk-li2uo-6a85b19e72.json");
+// const serviceAccount = require("/Users/raul/plex-fake-firebase-adminsdk-li2uo-6a85b19e72.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
