@@ -2,13 +2,15 @@ const admin = require("firebase-admin");
 
 const db = admin.firestore();
 
+// TODO: lanzarlo con una lambda en AWS o DigitalOceans
+
 module.exports = function(app) {
 
   app.get('/media', async (req,res) => {
     const page   = req.query.page || 0;
     const type   = req.query.type || 'movies';
     const filter = req.query.filter || 'order';
-    const limit = req.query.limit || 0;
+    const limit = parseInt(req.query.limit) || 0;
 
     let start     = limit * (page -1);
 

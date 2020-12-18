@@ -2,12 +2,14 @@ const puppeteer = require('puppeteer');
 const utils     = require('./utils/utils');
 const admin     = require("firebase-admin");
 
-const moviesUrl  = `https://195-154-178-71.06e267a88a7d4be5991af2a36c663e4b.plex.direct:32400/library/sections/9/all?type=1&sort=addedAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=${movieStart}&X-Plex-Container-Size=${movieEnd}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=o6gz0i8lr4gpu8bz7e9gkajg&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1784x1306%2C2560x1440&X-Plex-Token=H2oihB3g2ZUzUHXyXx-V&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
-const seriesUrl  = `https://195-154-185-117.1fa6c2d7e4d148db9e380a96583039ad.plex.direct:32400/library/sections/1/all?type=2&sort=episode.addedAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=${movieStart}&X-Plex-Container-Size=${movieEnd}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.49.2&X-Plex-Client-Identifier=o6gz0i8lr4gpu8bz7e9gkajg&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1437x1305%2C2560x1440&X-Plex-Token=UdMoTNn42q9Uzxi-6EsR&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
-const moviesType = 'movie';
-const showsType  = 'show';
 const movieStart = 0;
 const movieEnd   = 5206;
+
+const moviesUrl  = `https://195-154-178-71.06e267a88a7d4be5991af2a36c663e4b.plex.direct:32400/library/sections/9/all?type=1&sort=addedAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=${movieStart}&X-Plex-Container-Size=${movieEnd}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.48.1&X-Plex-Client-Identifier=o6gz0i8lr4gpu8bz7e9gkajg&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1784x1306%2C2560x1440&X-Plex-Token=H2oihB3g2ZUzUHXyXx-V&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
+const seriesUrl  = `https://195-154-185-117.1fa6c2d7e4d148db9e380a96583039ad.plex.direct:32400/library/sections/1/all?type=2&sort=episode.addedAt%3Adesc&includeCollections=1&includeAdvanced=1&includeMeta=1&X-Plex-Container-Start=${movieStart}&X-Plex-Container-Size=${movieEnd}&X-Plex-Product=Plex%20Web&X-Plex-Version=4.49.2&X-Plex-Client-Identifier=o6gz0i8lr4gpu8bz7e9gkajg&X-Plex-Platform=Chrome&X-Plex-Platform-Version=87.0&X-Plex-Sync-Version=2&X-Plex-Features=external-media%2Cindirect-media&X-Plex-Model=hosted&X-Plex-Device=OSX&X-Plex-Device-Name=Chrome&X-Plex-Device-Screen-Resolution=1437x1305%2C2560x1440&X-Plex-Token=UdMoTNn42q9Uzxi-6EsR&X-Plex-Language=es&X-Plex-Drm=widevine&X-Plex-Text-Format=plain&X-Plex-Provider-Version=1.3`;
+
+const moviesType = 'movie';
+const showsType  = 'show';
 
 const db = admin.firestore();
 
@@ -117,10 +119,10 @@ async function initByType (url, type) {
 }
 
 async function initCronTab () {
-  Promise.allSettled([
-    initByType(moviesUrl, moviesType),
-    initByType(seriesUrl, showsType)
-  ]);
+  // Promise.allSettled([
+  //   initByType(moviesUrl, moviesType),
+  //   initByType(seriesUrl, showsType)
+  // ]);
 }
 
 exports.init = async () => initCronTab();
