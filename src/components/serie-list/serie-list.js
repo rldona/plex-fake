@@ -22,7 +22,7 @@ class SerieList extends Component {
 
     const type = 'series';
 
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=5&limit=10`)
+    fetch(`http://34.252.151.163:3000/media?type=${type}&page=1&limit=100`)
       .then(response => response.json())
       .then(series => {
         this.setState(state => {
