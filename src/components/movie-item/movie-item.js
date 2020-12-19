@@ -24,7 +24,7 @@ class MovieItem extends Component {
     if (!movie) return null;
 
     return (
-      <div className={`item ${parseInt(movie.ratingAvergae) >= 5 ? (parseInt(movie.ratingAvergae) >= 6 ? 'positiva' : 'neutral') : 'negativa'} ${movie.viewCount ? 'viewed' : ''}`} onClick={() => this.navigateTo(movie._id)}>
+      <div className={`item ${parseInt(movie.ratingAvergae) >= 5 ? (parseInt(movie.ratingAvergae) >= 7 ? 'positiva' : 'neutral') : 'negativa'} ${movie.viewCount ? 'viewed' : ''}`} onClick={() => this.navigateTo(movie._id)}>
         <img src={movie.thumbnail} alt={movie.title} />
         { movie.ratingAvergae !== '0' ? <p className="rating-average"><i className="fas fa-heart"></i> {movie.ratingAvergae === '0' ? '-' : movie.ratingAvergae}</p> : null }
         <h2>{movie.title}</h2>
