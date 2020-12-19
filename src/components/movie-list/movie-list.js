@@ -8,7 +8,7 @@ class MovieList extends Component {
     this.state = {
       movieList: [],
       type: 'movies',
-      page: 1,
+      page: 2,
       size: 3
     };
   }
@@ -25,8 +25,14 @@ class MovieList extends Component {
       size
     } = this.state;
 
+    this.setState((state, props) => ({
+      page: state.page + 1
+    }));
+
+    console.log(this.state);
+
     // fetch(`https://plex-fake-server.herokuapp.com/movies?type=${type}&page=${page}&size=${size}`)
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}`)
+    fetch(`http://localhost:3000/media?type=${type}&page=${page}&limit=${size}`)
       .then(response => response.json())
       .then(movies => {
         this.setState(state => {
@@ -40,7 +46,6 @@ class MovieList extends Component {
   }
 
   loadMoreMovies = () => {
-    this.setState({ page: this.state.page + 1 });
     this.fetchMovieList();
   }
 

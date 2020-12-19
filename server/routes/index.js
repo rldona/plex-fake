@@ -10,9 +10,11 @@ module.exports = function(app) {
     const page   = req.query.page || 0;
     const type   = req.query.type || 'movies';
     const filter = req.query.filter || 'order';
-    const limit = parseInt(req.query.limit) || 0;
+    const limit  = parseInt(req.query.limit) || 0;
 
-    let start     = limit * (page -1);
+    let start = limit * (page - 1) + 1;
+
+    console.log('start: ' + start);
 
     let mediaList = [];
 
