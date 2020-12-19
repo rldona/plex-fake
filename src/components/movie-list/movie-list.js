@@ -10,7 +10,7 @@ class MovieList extends Component {
       type: 'movies',
       page: 2,
       size: 50,
-      filter: 'rating'
+      filter: 'originallyAvailableAt'
     };
   }
 
