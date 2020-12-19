@@ -19,13 +19,10 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/movie-list">Movies</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/users">Users</Link>
+            <Link to="/show-list">Shows</Link>
           </li>
         </ul>
       </nav>
