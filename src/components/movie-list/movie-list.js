@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Box, Tab, Tabs } from 'grommet';
 
 import MovieItem from '../movie-item/movie-item';
 class MovieList extends Component {
@@ -10,7 +9,7 @@ class MovieList extends Component {
       movieList: [],
       type: 'movies',
       page: 1,
-      size: 50
+      size: 3
     };
   }
 
@@ -31,9 +30,9 @@ class MovieList extends Component {
       .then(response => response.json())
       .then(movies => {
         this.setState(state => {
-          const newList = movieList.concat(movies.data);
+          const newList = movieList.concat(movies);
           return {
-            ...this.state,
+            ...state,
             movieList: newList
           };
         });
@@ -52,8 +51,6 @@ class MovieList extends Component {
       return null;
     }
 
-    console.log(movieList[0]);
-
     return (
       <div>
         <div className="movie-list">
@@ -63,7 +60,7 @@ class MovieList extends Component {
             })
           }
         </div>
-        <button className="load-more" onClick={() => this.loadMoreMovies()}>Cargar más...</button>
+        <button className="load-more" onClick={() => this.loadMoreMovies()}>Cargar más <i className="fas fa-arrow-right"></i></button>
       </div>
     );
   }

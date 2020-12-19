@@ -56,7 +56,7 @@ class SerieList extends Component {
             })
           }
         </div>
-        <button className="load-more" onClick={() => this.loadMoreMovies()}>Cargar más...</button>
+        <button className="load-more" onClick={() => this.loadMoreMovies()}>Cargar más <i className="fas arrow-right"></i></button>
       </div>
     );
   }

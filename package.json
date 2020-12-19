@@ -31,12 +31,12 @@
     "xml2js": "^0.4.23"
   },
   "scripts": {
-    "start": "npm run build && pm2 start ./server/client.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "logs": "heroku logs --tail",
-    "start-client": "npm run build && serve -s build",
+    "start-client": "npm run build && pm2 start ./server/client.js",
     "start-server": "pm2 start ./server/server.js"
   },
   "eslintConfig": {
