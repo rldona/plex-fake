@@ -7,7 +7,10 @@ class SerieList extends Component {
     super(props);
 
     this.state = {
-      serieList: []
+      serieList: [],
+      type: 'shows',
+      page: 2,
+      size: 50
     };
   }
 
@@ -17,12 +20,13 @@ class SerieList extends Component {
 
   fetchSerieList = () => {
     const {
-      serieList
+      serieList,
+      type,
+      page,
+      size
     } = this.state;
 
-    const type = 'series';
-
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=1&limit=100`)
+    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}`)
       .then(response => response.json())
       .then(series => {
         this.setState(state => {
