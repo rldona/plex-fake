@@ -26,10 +26,10 @@ class MovieItem extends Component {
     return (
       <div className={`item ${parseInt(movie.ratingAvergae) >= 5 ? (parseInt(movie.ratingAvergae) >= 6 ? 'positiva' : 'neutral') : 'negativa'} ${movie.viewCount ? 'viewed' : ''}`} onClick={() => this.navigateTo(movie._id)}>
         <img src={movie.thumbnail} alt={movie.title} />
-        <p className="rating-average"><i className="fas fa-heart"></i> {movie.ratingAvergae === '0' ? '-' : movie.ratingAvergae}</p>
+        { movie.ratingAvergae !== 0 ? <p className="rating-average"><i className="fas fa-heart"></i> {movie.ratingAvergae === '0' ? '-' : movie.ratingAvergae}</p> : null }
         <h2>{movie.title}</h2>
         <div className="info-extra">
-          <p><i className="fas fa-eye"></i> {movie.ratingCount  === '0' ? '-' : movie.ratingCount}</p>
+          { movie.ratingCount !== 0 ? <p><i className="fas fa-eye"></i> {movie.ratingCount  === '0' ? '-' : movie.ratingCount}</p> : null }
           <p><i className="fas fa-clock"></i> {this.convertMinutesToHours(movie.duration)}</p>
         </div>
       </div>
