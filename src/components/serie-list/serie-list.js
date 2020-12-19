@@ -30,7 +30,7 @@ class SerieList extends Component {
       .then(response => response.json())
       .then(series => {
         this.setState(state => {
-          const newList = serieList.concat(series.data);
+          const newList = serieList.concat(series);
           return {
             ...this.state,
             serieList: newList
