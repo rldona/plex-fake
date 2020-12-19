@@ -37,7 +37,8 @@
     "eject": "react-scripts eject",
     "logs": "heroku logs --tail",
     "start-client": "npm run build && pm2 start ./server/client.js",
-    "start-server": "pm2 start ./server/server.js"
+    "start-server": "pm2 start ./server/server.js",
+    "deploy": "pm2 delete 0 && pm2 delete 1 && git pull && npm run start-server && npm run start-client"
   },
   "eslintConfig": {
     "extends": "react-app"
