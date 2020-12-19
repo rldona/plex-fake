@@ -12,13 +12,14 @@ module.exports = function(app) {
     const filter = req.query.filter || 'order';
     const limit  = parseInt(req.query.limit) || 0;
 
-    let start = limit * (page - 1) + 1;
+    let start = limit * (page - 1);
 
     console.log('filter: ' + start);
 
     let mediaList = [];
 
     db.collection(type)
+      .startAt(start)
       .orderBy(filter, 'desc')
       .limit(limit)
       .get()
