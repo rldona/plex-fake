@@ -123,6 +123,7 @@ nav {
   min-width: 64px;
   font-size: 18px;
   font-weight: 600;
+  z-index: 99;
 }
 
 .item .rating-average i {
