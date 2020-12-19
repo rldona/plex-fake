@@ -52,6 +52,8 @@ class MovieList extends Component {
       return null;
     }
 
+    console.log(movieList[0]);
+
     return (
       <div>
         <div className="movie-list">
