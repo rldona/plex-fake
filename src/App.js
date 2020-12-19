@@ -3,7 +3,8 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Link
 } from "react-router-dom";
 
 import './App.css';
@@ -15,6 +16,19 @@ import MovieDetail from './components/movie-detail/movie-detail';
 function App() {
   return (
     <Router>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/users">Users</Link>
+          </li>
+        </ul>
+      </nav>
       <Switch>
         <Route exact path="/">
           <MovieList />
