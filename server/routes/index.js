@@ -14,13 +14,12 @@ module.exports = function(app) {
 
     let start = limit * (page - 1) + 1;
 
-    console.log('start: ' + start);
+    console.log('filter: ' + start);
 
     let mediaList = [];
 
     db.collection(type)
       .orderBy(filter, 'desc')
-      .startAt(start)
       .limit(limit)
       .get()
       .then((snapshot) => {

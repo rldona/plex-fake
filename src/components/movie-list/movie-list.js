@@ -27,7 +27,7 @@ class MovieList extends Component {
       filter
     } = this.state;
 
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
+    fetch(`http://localhost:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
       .then(response => response.json())
       .then(movies => {
         this.setState(state => {
