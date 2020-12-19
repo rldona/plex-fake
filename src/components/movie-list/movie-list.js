@@ -8,7 +8,7 @@ class MovieList extends Component {
     this.state = {
       movieList: [],
       type: 'movies',
-      page: 2,
+      page: 1,
       size: 50,
       filter: 'originallyAvailableAt'
     };

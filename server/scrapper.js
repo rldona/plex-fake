@@ -13,8 +13,6 @@ const showsType  = 'show';
 
 const db = admin.firestore();
 
-let movieStoredFound = false;
-let showStoredFound  = false;
 
 async function addNewReview (review, browser) {
   console.log(review.title);
@@ -60,9 +58,6 @@ async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchP
   const review    = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
   const newReview = db.collection(`${review.type}s`).doc(review.title);
 
-  if (movieStoredFound && showStoredFound) {
-    process.exit();
-  }
 
   if (typeof urlSearchPage !== 'undefined') {
     await page.goto(urlSearchPage, { waitUntil: 'networkidle2', timeout: 0 });
@@ -79,11 +74,7 @@ async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchP
         db.collection(`${review.type}s`).doc(review.title).set(review);
       } else {
         console.log('El documento ya está en la base de datos');
-        if (review.type === 'movie') {
-          movieStoredFound = true;
-        } else {
-          showStoredFound = true;
-        }
+        process.exit();
       }
     })
     .catch(err => {
@@ -108,6 +99,9 @@ async function createReview(type) {
 
   for (let i = 1; i < mediaListJSON.elements[0].elements.length; i++) {
     let movieInfo = mediaListJSON.elements[0].elements[i];
+
+    console.log(movieInfo.attributes.title);
+
     let movieInfoFiltered = await utils.filterMediaPlexInfo(movieInfo);
     await getReview(movieInfoFiltered);
   }
@@ -119,10 +113,8 @@ async function initByType (url, type) {
 }
 
 async function initCronTab () {
-  Promise.allSettled([
-    initByType(moviesUrl, moviesType),
-    initByType(seriesUrl, showsType)
-  ]);
+  // initByType(moviesUrl, moviesType);
+  initByType(seriesUrl, showsType);
 }
 
 exports.init = async () => initCronTab();
