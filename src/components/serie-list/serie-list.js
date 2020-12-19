@@ -10,7 +10,8 @@ class SerieList extends Component {
       serieList: [],
       type: 'shows',
       page: 2,
-      size: 50
+      size: 50,
+      filter: 'originallyAvailableAt'
     };
   }
 
@@ -23,10 +24,11 @@ class SerieList extends Component {
       serieList,
       type,
       page,
-      size
+      size,
+      filter
     } = this.state;
 
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}`)
+    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
       .then(response => response.json())
       .then(series => {
         this.setState(state => {
