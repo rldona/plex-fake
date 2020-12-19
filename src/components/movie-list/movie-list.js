@@ -23,7 +23,8 @@ class MovieList extends Component {
       movieList,
       type,
       page,
-      size
+      size,
+      filter
     } = this.state;
 
     fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
