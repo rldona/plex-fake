@@ -56,6 +56,7 @@ exports.filterMediaPlexInfo = async (movie) => {
     year: movie.attributes.year || 1990,
     originallyAvailableAt: movie.attributes.originallyAvailableAt || '',
     addedAt: movie.attributes.addedAt || '',
+    ratingKey: movie.attributes.ratingKey || 'no ratingKey',
     updatedAt: movie.attributes.updatedAt || '',
     theMovieDbRating: movie.attributes.rating || '',
     theMovieDbUrl: movie.attributes.theMovieDbUrl || '',
@@ -104,6 +105,7 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.type = media.type;
   mediaReview.duration = media.duration;
   mediaReview.studio = media.studio;
+  mediaReview.ratingKey = media.ratingKey;
   mediaReview.year = media.year;
   mediaReview.originallyAvailableAt = media.originallyAvailableAt;
   mediaReview.addedAt = media.addedAt;
