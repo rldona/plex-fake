@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const utils = require('./utils/utils');
 const admin = require("firebase-admin");
 
-const mediaStart = 0;
-const mediaEnd = 50;
+const mediaStart = 2;
+const mediaEnd   = 2;
 
 let contador = mediaStart;
 
@@ -16,29 +16,44 @@ const showsType  = 'show';
 const db = admin.firestore();
 
 async function addNewReview (review, browser) {
-  console.log(review.title);
+  // TODO: eliminar !!
+  console.log(`review.title: ${review.title} | review.title: ${review.title} | review.thumbnail: ${review.thumbnail} | contador: ${contador}`);
+
   db.collection(`${review.type}s`).doc(review.ratingKey).set(review);
+
   await browser.close();
 }
 
 async function getReview (moviePlexInfo) {
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const page    = await browser.newPage();
+  const width    = 1100;
+  const height   = 2000;
 
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    defaultViewport: {
+      width: width,
+      height: height
+    }
+  });
+
+  const page       = await browser.newPage();
   const searchTerm = moviePlexInfo.title;
 
-  await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2', timeout: 0 });
+  await page.setViewport({
+    width: width,
+    height: height
+  })
 
+  await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2', timeout: 0 });
   await page.waitFor('.qc-cmp2-summary-buttons');
   await page.click('button.sc-ifAKCX.ljEJIv')
-
   await page.waitFor('#top-search-input');
   await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
   await page.click('input[type="submit"]');
-
   await page.waitForSelector('#main-content-table');
 
-  console.log(page.url().search('search'));
+  console.log(`Page: ${page.url().search('search')}`);
 
   if (moviePlexInfo.title.indexOf("/") === -1) {
     if (page.url().search('search') === -1) {
@@ -57,24 +72,14 @@ async function getReview (moviePlexInfo) {
   }
 }
 
-async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchPage) {
-  const review    = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
+async function getMovieReviewFromDetail(browser, page, moviePlexInfo) {
+  await page.waitForSelector('.movie-disclaimer');
 
-  const newReview = db.collection(`${review.type}s`).doc(review.ratingKey);
+  const review = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
 
-  if (typeof urlSearchPage !== 'undefined') {
-    await page.goto(urlSearchPage, { waitUntil: 'networkidle2', timeout: 0 });
-  }
-
-  await page.waitForSelector('#mt-content-cell');
-
-  await addNewReview(review, browser);
-
-  db.collection(`${review.type}s`).doc(review.ratingKey).set(review);
+  await addNewReview(review, browser, page); // TODO: cambiar por ==> db.collection(`${review.type}s`).doc(review.ratingKey).set(review); y eliminar la función
 
   contador++;
-
-  console.log(contador);
 
   // newReview.get()
   //   .then(doc => {
@@ -94,13 +99,9 @@ async function getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchP
 }
 
 async function getMovieReviewFromSearch(browser, page, moviePlexInfo) {
-  await page.waitForSelector('.z-search');
-
-  const urlSearchPage = await page.evaluate(() => {
-    return document.querySelector('.z-search > .se-it .mc-poster > a[href]').outerHTML.split('"')[3].toString();
-  });
-
-  await getMovieReviewFromDetail(browser, page, moviePlexInfo, urlSearchPage);
+  await page.waitForSelector('#title-result > .z-search > .se-it:nth-child(2) > .fa-shadow-nb > .movie-card > .mc-info-container > .mc-title > a')
+  await page.click('#title-result > .z-search > .se-it:nth-child(2) > .fa-shadow-nb > .movie-card > .mc-info-container > .mc-title > a')
+  await getMovieReviewFromDetail(browser, page, moviePlexInfo);
 }
 
 async function createReview(type) {
@@ -119,8 +120,8 @@ async function initByType (url, type) {
 }
 
 async function initCronTab () {
-  // await initByType(moviesUrl, moviesType);
-  await initByType(seriesUrl, showsType);
+  await initByType(moviesUrl, moviesType);
+  // await initByType(seriesUrl, showsType);
 
   process.exit();
 }

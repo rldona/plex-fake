@@ -60,7 +60,12 @@ exports.filterMediaPlexInfo = async (movie) => {
     updatedAt: movie.attributes.updatedAt || '',
     theMovieDbRating: movie.attributes.rating || '',
     theMovieDbUrl: movie.attributes.theMovieDbUrl || '',
-    infoExtra: movie.elements || ''
+    infoExtra: movie.elements || '',
+    key: movie.key || '',
+    originalTitle: movie.originalTitle || '',
+    tagline: movie.tagline || '',
+    thumb: movie.thumb || '',
+    art: movie.art || ''
   }
 };
 
@@ -69,9 +74,8 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
     const reviewDescription = document.querySelector('[itemprop="description"]') ? document.querySelector('[itemprop="description"]').textContent : '';
     const reviewImage = document.querySelector('[itemprop="image"]') ? document.querySelector('[itemprop="image"]').outerHTML.split(' ')[4].replace('src="', '').replace('"', '') : '';
-    const ratingAvergae = document.querySelector('#movie-rat-avg') ? document.querySelector('#movie-rat-avg').textContent.split('').filter(word => word !== ' ' && word !== '\n' && word !== ',').toString() : '0';
+    const ratingAverage = document.querySelector('#movie-rat-avg') ? document.querySelector('#movie-rat-avg').textContent.split('').filter(word => word !== ' ' && word !== '\n' && word !== ',').toString() : '0';
     const ratingCount = document.querySelector('#movie-count-rat > span') ? document.querySelector('#movie-count-rat > span').textContent : '0';
-
     const professionalReviewList = document.querySelectorAll('#pro-reviews li') || [];
 
     let reviewList = [];
@@ -94,7 +98,7 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
       title: movieTitle,
       sinopsis: reviewDescription,
       thumbnail: reviewImage,
-      ratingAvergae: ratingAvergae,
+      ratingAverage: ratingAverage,
       ratingCount: ratingCount,
       reviewList
     }
