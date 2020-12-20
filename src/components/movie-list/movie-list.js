@@ -9,7 +9,7 @@ class MovieList extends Component {
       movieList: [],
       type: 'movies',
       page: 1,
-      size: 50,
+      size: 5,
       filter: 'title'
     };
   }

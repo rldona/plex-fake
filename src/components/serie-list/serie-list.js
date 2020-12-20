@@ -10,8 +10,8 @@ class SerieList extends Component {
       serieList: [],
       type: 'shows',
       page: 2,
-      size: 50,
-      filter: 'originallyAvailableAt'
+      size: 5,
+      filter: 'title'
     };
   }
 
