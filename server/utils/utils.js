@@ -58,14 +58,13 @@ exports.filterMediaPlexInfo = async (movie) => {
     addedAt: movie.attributes.addedAt || '',
     ratingKey: movie.attributes.ratingKey || 'no ratingKey',
     updatedAt: movie.attributes.updatedAt || '',
-    theMovieDbRating: movie.attributes.rating || '',
-    theMovieDbUrl: movie.attributes.theMovieDbUrl || '',
-    infoExtra: movie.elements || '',
-    key: movie.key || '',
-    originalTitle: movie.originalTitle || '',
-    tagline: movie.tagline || '',
-    thumb: movie.thumb || '',
-    art: movie.art || ''
+    infoExtra: movie.elements || {},
+    key: movie.attributes.key || '',
+    originalTitle: movie.attributes.originalTitle || '',
+    tagline: movie.attributes.tagline || '',
+    thumb: movie.attributes.thumb || '',
+    art: movie.attributes.art || '',
+    atributtesExtra: movie.attributes || {}
   }
 };
 
@@ -114,9 +113,13 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.originallyAvailableAt = media.originallyAvailableAt;
   mediaReview.addedAt = media.addedAt;
   mediaReview.updatedAt = media.updatedAt;
-  mediaReview.theMovieDbRating = media.theMovieDbRating;
-  mediaReview.theMovieDbUrl = media.theMovieDbUrl;
   mediaReview.infoExtra = media.infoExtra;
+  mediaReview.key = media.key;
+  mediaReview.originalTitle = media.originalTitle;
+  mediaReview.tagline = media.tagline;
+  mediaReview.thumb = media.thumb;
+  mediaReview.art = media.art;
+  mediaReview.atributtesExtra = media.atributtesExtra;
 
   return mediaReview;
 }

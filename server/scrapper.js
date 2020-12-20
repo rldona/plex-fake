@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const utils = require('./utils/utils');
 const admin = require("firebase-admin");
 
-const mediaStart = 2;
-const mediaEnd   = 2;
+const mediaStart = 10;
+const mediaEnd   = 10;
 
 let contador = mediaStart;
 
@@ -14,15 +14,6 @@ const moviesType = 'movie';
 const showsType  = 'show';
 
 const db = admin.firestore();
-
-async function addNewReview (review, browser) {
-  // TODO: eliminar !!
-  console.log(`review.title: ${review.title} | review.title: ${review.title} | review.thumbnail: ${review.thumbnail} | contador: ${contador}`);
-
-  db.collection(`${review.type}s`).doc(review.ratingKey).set(review);
-
-  await browser.close();
-}
 
 async function getReview (moviePlexInfo) {
   const width    = 1100;
@@ -65,7 +56,9 @@ async function getReview (moviePlexInfo) {
     }
 
     if (page.url().search('search') === 35) {
-      await addNewReview(moviePlexInfo, browser);
+      await page.waitForSelector('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
+      await page.click('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
+      await getMovieReviewFromDetail(browser, page, moviePlexInfo);
     }
   } else {
     await browser.close();
@@ -76,9 +69,9 @@ async function getMovieReviewFromDetail(browser, page, moviePlexInfo) {
   await page.waitForSelector('.movie-disclaimer');
 
   const review = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
+  console.log(`review.title: ${review.title} | review.title: ${review.title} | review.thumbnail: ${review.thumbnail} | contador: ${contador}`);
 
-  await addNewReview(review, browser, page); // TODO: cambiar por ==> db.collection(`${review.type}s`).doc(review.ratingKey).set(review); y eliminar la función
-
+  db.collection(`${review.type}s`).doc(review.ratingKey).set(review);
   contador++;
 
   // newReview.get()
