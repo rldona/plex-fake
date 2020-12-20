@@ -19,7 +19,7 @@ module.exports = function(app) {
     let mediaList = [];
 
     db.collection(type)
-      .orderBy(filter, 'desc')
+      .orderBy(filter)
       .limit(limit)
       .get()
       .then((snapshot) => {
