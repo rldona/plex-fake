@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const utils = require('./utils/utils');
 const admin = require("firebase-admin");
 
-const mediaStart = 10;
-const mediaEnd   = 10;
+const mediaStart = 0;
+const mediaEnd   = 5647;
 
 let contador = mediaStart;
 
@@ -22,23 +22,17 @@ async function getReview (moviePlexInfo) {
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    defaultViewport: {
-      width: width,
-      height: height
-    }
+    defaultViewport: { width: width,height: height }
   });
 
   const page       = await browser.newPage();
   const searchTerm = moviePlexInfo.title;
 
-  await page.setViewport({
-    width: width,
-    height: height
-  })
+  await page.setViewport({ width: width, height: height });
 
   await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2', timeout: 0 });
   await page.waitFor('.qc-cmp2-summary-buttons');
-  await page.click('button.sc-ifAKCX.ljEJIv')
+  await page.click('button.sc-ifAKCX.ljEJIv');
   await page.waitFor('#top-search-input');
   await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
   await page.click('input[type="submit"]');
