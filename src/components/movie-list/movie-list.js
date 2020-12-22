@@ -23,7 +23,7 @@ class MovieList extends Component {
       page
     } = this.state;
 
-    fetch(`http://localhost:3000/media?type=${type}&page=${page}`)
+    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}`)
       .then(response => response.json())
       .then(movies => {
         console.log(movies.length);

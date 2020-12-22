@@ -9,9 +9,7 @@ class SerieList extends Component {
     this.state = {
       serieList: [],
       type: 'shows',
-      page: 2,
-      size: 5,
-      filter: 'title'
+      page: 0
     };
   }
 
@@ -23,12 +21,10 @@ class SerieList extends Component {
     const {
       serieList,
       type,
-      page,
-      size,
-      filter
+      page
     } = this.state;
 
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
+    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}`)
       .then(response => response.json())
       .then(series => {
         this.setState(state => {
@@ -42,8 +38,7 @@ class SerieList extends Component {
   }
 
   loadMoreMovies = () => {
-    this.setState({ page: this.state.page + 1 });
-    this.fetchserieList();
+    this.setState({ page: this.state.page + 1 }, () => this.fetchserieList());
   }
 
   render() {
