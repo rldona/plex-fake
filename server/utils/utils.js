@@ -103,6 +103,8 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
     }
   });
 
+  console.log(page.url());
+
   mediaReview.title = media.title;
   mediaReview.viewCount = media.viewCount;
   mediaReview.type = media.type;
@@ -120,6 +122,7 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.thumb = media.thumb;
   mediaReview.art = media.art;
   mediaReview.atributtesExtra = media.atributtesExtra;
+  mediaReview.filmaffinityUrl = page.url();
 
   return mediaReview;
 }

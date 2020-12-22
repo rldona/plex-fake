@@ -7,30 +7,52 @@ const db = admin.firestore();
 module.exports = function(app) {
 
   app.get('/media', async (req,res) => {
-    const page   = req.query.page || 0;
     const type   = req.query.type || 'movies';
-    const filter = req.query.filter || 'order';
-    const limit  = parseInt(req.query.limit) || 0;
-
-    let start = limit * (page - 1);
-
-    console.log('filter: ' + start);
+    const filter = req.query.filter || 'title';
+    const limit  = parseInt(req.query.limit) || 50;
+    const page   = parseInt(req.query.page) || 0;
 
     let mediaList = [];
 
-    db.collection(type)
-      .orderBy(filter)
-      .limit(limit)
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          mediaList.push(doc.data());
+    // TODO: refactorizar y dejar una única llamada a la colleción añadiendo o quitando el startAfter()
+
+    if (page === 0) {
+      db.collection(type)
+        .orderBy(filter)
+        .limit(limit)
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            mediaList.push(doc.data());
+          });
+          res.json(mediaList);
+        })
+        .catch((err) => {
+          console.log('Error getting documents', err);
         });
-        res.json(mediaList);
-      })
-      .catch((err) => {
-        console.log('Error getting documents', err);
-      });
+    } else {
+      const max      = limit * page;
+      const first    = db.collection(type).orderBy(filter).limit(max);
+      const snapshot = await first.get();
+
+      let last = snapshot.docs[snapshot.docs.length - 1];
+
+      db.collection(type)
+        .orderBy(filter)
+        .limit(limit)
+        .startAfter(last)
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            mediaList.push(doc.data());
+          });
+          res.json(mediaList);
+        })
+        .catch((err) => {
+          console.log('Error getting documents', err);
+        });
+    }
+
   });
 
 }

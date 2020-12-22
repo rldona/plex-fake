@@ -8,9 +8,7 @@ class MovieList extends Component {
     this.state = {
       movieList: [],
       type: 'movies',
-      page: 1,
-      size: 5,
-      filter: 'title'
+      page: 0
     };
   }
 
@@ -22,14 +20,13 @@ class MovieList extends Component {
     const {
       movieList,
       type,
-      page,
-      size,
-      filter
+      page
     } = this.state;
 
-    fetch(`http://34.252.151.163:3000/media?type=${type}&page=${page}&limit=${size}&filter=${filter}`)
+    fetch(`http://localhost:3000/media?type=${type}&page=${page}`)
       .then(response => response.json())
       .then(movies => {
+        console.log(movies.length);
         this.setState(state => {
           const newList = movieList.concat(movies);
           return {
@@ -41,8 +38,7 @@ class MovieList extends Component {
   }
 
   loadMoreMovies = () => {
-    this.setState({ page: this.state.page + 1 });
-    this.fetchMovieList();
+    this.setState({ page: this.state.page + 1 }, () => this.fetchMovieList());
   }
 
   render() {

@@ -33,6 +33,6 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is up a port ${port}!`);
 
-  scrapper.init();
+  // scrapper.init();
 
 });

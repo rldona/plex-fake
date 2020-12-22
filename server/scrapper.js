@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const utils = require('./utils/utils');
 const admin = require("firebase-admin");
 
-const mediaStart = 0;
+const mediaStart = 4584;
 const mediaEnd   = 5647;
 
 let contador = mediaStart;
@@ -40,10 +40,10 @@ async function getReview (moviePlexInfo) {
   await page.click('input[type="submit"]');
   await page.waitForSelector('#main-content-table');
 
-  // console.log(searchTerm);
-  // console.log(moviePlexInfo);
+  console.log(`\n ==> ${searchTerm} <== \n`);
 
-  if (moviePlexInfo.title.indexOf("/") === -1 && moviePlexInfo.type !== 'collection') {
+  if (moviePlexInfo.title.indexOf("/") === -1 && searchTerm.indexOf('.') === -1 && searchTerm.indexOf('-') === -1 && searchTerm.indexOf(':') === -1 && searchTerm.indexOf('ร') === -1 && moviePlexInfo.type !== 'collection') {
+
     console.log(`Page: ${page.url().search('search')} <||> Contador: ${contador} <||> WithoutThumbail: ${withoutThumbail}`);
 
     if (page.url().search('search') === -1) {
@@ -55,11 +55,17 @@ async function getReview (moviePlexInfo) {
     }
 
     if (page.url().search('search') === 35) {
-      await page.waitForSelector('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
-      await page.click('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
-      await getMovieReviewFromDetail(browser, page, moviePlexInfo);
+      try {
+        await page.waitForSelector('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
+        await page.click('.gsc-webResult > .gs-webResult > .gsc-thumbnail-inside > .gs-title > .gs-title')
+        await getMovieReviewFromDetail(browser, page, moviePlexInfo);
+      } catch(error) {
+        db.collection('scrapping-error').doc(moviePlexInfo.ratingKey).set(moviePlexInfo);
+        await browser.close();
+      }
     }
   } else {
+    db.collection('scrapping-error').doc(moviePlexInfo.ratingKey).set(moviePlexInfo);
     await browser.close();
   }
 }
